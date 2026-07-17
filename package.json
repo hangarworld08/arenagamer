@@ -1,0 +1,9 @@
+{
+  "name": "hangar-fc26",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Campeonato FC26 - Hangar World",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

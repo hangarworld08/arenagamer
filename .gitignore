@@ -1,0 +1,25 @@
+# ============================================================
+# HANGAR WORLD — CAMPEONATO FC26
+# ============================================================
+
+# segredos — nunca commitar
+.env
+.env.local
+.env.*.local
+
+# o README fica só local: tem passo a passo com referências às suas
+# próprias chaves/variáveis e não precisa ir pro GitHub público
+README.md
+
+# dependências
+node_modules/
+package-lock.json
+
+# build/cache da Vercel
+.vercel/
+
+# sistema operacional / editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
