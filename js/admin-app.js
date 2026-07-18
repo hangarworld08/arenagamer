@@ -127,8 +127,8 @@ function renderAdmPlayers(){
 
   return `
     <div class="adm-section-head">
-      <div><h2>Jogadores</h2><p>${active.length} de 32 cadastrados${drawn? ' — grupos já sorteados':''}.</p></div>
-      ${!drawn ? `<div class="adm-section-actions"><button class="btn btn--primary" data-adm-action="drawGroups" ${active.length!==32?'disabled':''}>Sortear grupos</button></div>` : ''}
+      <div><h2>Jogadores</h2><p>${active.length} de 24 cadastrados${drawn? ' — grupos já sorteados':''}.</p></div>
+      ${!drawn ? `<div class="adm-section-actions"><button class="btn btn--primary" data-adm-action="drawGroups" ${active.length!==24?'disabled':''}>Sortear grupos</button></div>` : ''}
     </div>
 
     ${!drawn ? `
