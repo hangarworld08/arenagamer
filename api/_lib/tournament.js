@@ -113,13 +113,18 @@ async function substitutePlayer(supabase, oldPlayerId, waitlistId){
 /* ---------------- Sorteio de grupos ---------------- */
 async function drawGroups(supabase){
   const { data: players } = await supabase.from('players').select('*').eq('is_active', true);
-  if(!players || players.length !== 32){
-    return {ok:false, msg:`É necessário ter exatamente 32 jogadores ativos (atual: ${players ? players.length : 0}).`};
+  
+  // Validação atualizada para 24 jogadores ativos (8 grupos de 3)
+  if(!players || players.length !== 24){
+    return {ok:false, msg:`É necessário ter exatamente 24 jogadores ativos (atual: ${players ? players.length : 0}).`};
   }
+  
   const shuffled = shuffle(players);
   const groupOf = {};
+  
+  // Agora distribui 3 jogadores por grupo (idx * 3)
   GROUP_LETTERS.forEach((letter, idx)=>{
-    shuffled.slice(idx*4, idx*4+4).forEach(p=> groupOf[p.id] = letter);
+    shuffled.slice(idx*3, idx*3+3).forEach(p=> groupOf[p.id] = letter);
   });
 
   await Promise.all(Object.entries(groupOf).map(([playerId, letter])=>
@@ -129,20 +134,25 @@ async function drawGroups(supabase){
   let matchesByGroup = {};
   GROUP_LETTERS.forEach(letter => {
     const ids = Object.keys(groupOf).filter(id => groupOf[id] === letter);
-    const [a, b, c, d] = shuffle(ids);
-    // Cada grupo gera exatamente 4 confrontos
+    const [a, b, c] = shuffle(ids); // Pega os 3 jogadores sorteados do grupo
+    
+    // Com 3 jogadores (A, B, C), criamos 3 confrontos para todos jogarem entre si:
+    // Jogo 1: A vs B
+    // Jogo 2: C vs A
+    // Jogo 3: B vs C
     matchesByGroup[letter] = [
       { group_letter: letter, p1: a, p2: b, status: 'waiting' },
-      { group_letter: letter, p1: c, p2: d, status: 'waiting' },
-      { group_letter: letter, p1: a, p2: c, status: 'waiting' },
-      { group_letter: letter, p1: b, p2: d, status: 'waiting' }
+      { group_letter: letter, p1: c, p2: a, status: 'waiting' },
+      { group_letter: letter, p1: b, p2: c, status: 'waiting' }
     ];
   });
 
   let matches = [];
   let order = 0;
-  // Intercala: pega o jogo 1 de todos os grupos, depois o jogo 2 de todos, etc.
-  for (let roundIdx = 0; roundIdx < 4; roundIdx++) {
+  
+  // Intercala: roda o 1º jogo de todos os grupos, depois o 2º, depois o 3º.
+  // Como são 3 pessoas por grupo, agora o loop vai até 3 rodadas (0, 1 e 2).
+  for (let roundIdx = 0; roundIdx < 3; roundIdx++) {
     GROUP_LETTERS.forEach(letter => {
       const match = matchesByGroup[letter][roundIdx];
       match.order_index = order++;
