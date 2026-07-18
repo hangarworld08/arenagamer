@@ -126,16 +126,29 @@ async function drawGroups(supabase){
     supabase.from('players').update({ group_letter: letter }).eq('id', playerId)
   ));
 
+  let matchesByGroup = {};
+  GROUP_LETTERS.forEach(letter => {
+    const ids = Object.keys(groupOf).filter(id => groupOf[id] === letter);
+    const [a, b, c, d] = shuffle(ids);
+    // Cada grupo gera exatamente 4 confrontos
+    matchesByGroup[letter] = [
+      { group_letter: letter, p1: a, p2: b, status: 'waiting' },
+      { group_letter: letter, p1: c, p2: d, status: 'waiting' },
+      { group_letter: letter, p1: a, p2: c, status: 'waiting' },
+      { group_letter: letter, p1: b, p2: d, status: 'waiting' }
+    ];
+  });
+
   let matches = [];
   let order = 0;
-  GROUP_LETTERS.forEach(letter=>{
-    const ids = Object.keys(groupOf).filter(id=>groupOf[id]===letter);
-    const [a,b,c,d] = shuffle(ids);
-    const pairs = [[a,b],[c,d],[a,c],[b,d]];
-    pairs.forEach(([p1,p2])=>{
-      matches.push({ group_letter: letter, p1, p2, status:'waiting', order_index: order++ });
+  // Intercala: pega o jogo 1 de todos os grupos, depois o jogo 2 de todos, etc.
+  for (let roundIdx = 0; roundIdx < 4; roundIdx++) {
+    GROUP_LETTERS.forEach(letter => {
+      const match = matchesByGroup[letter][roundIdx];
+      match.order_index = order++;
+      matches.push(match);
     });
-  });
+  }
 
   const { data: settings } = await supabase.from('tournament_state').select('stations').eq('id',1).single();
   matches = assignStationsAndOrder(matches, settings.stations || 2, 0).map(m=>({...m, order_index:m.order_index}));
