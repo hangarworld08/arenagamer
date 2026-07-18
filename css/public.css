@@ -90,3 +90,16 @@
   .stations-row{ grid-template-columns:1fr; }
   .pub-header{ flex-wrap:wrap; }
 }
+/* Quando a tela for pequena (Celular), esconde o bloco do QR Code */
+@media (max-width: 480px) {
+  .esconder-no-celular {
+    display: none !important;
+  }
+}
+
+/* Quando a tela for grande (TV), esconde as promoções (já configurado antes) */
+@media (min-width: 481px) {
+  .esconder-na-tv {
+    display: none !important;
+  }
+}

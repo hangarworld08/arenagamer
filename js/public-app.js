@@ -67,9 +67,32 @@ function renderLiveTab(){
       </div>`;
   }
 
-  return `<div class="stations-row">${cards}</div>`;
-}
+  return `
+      <div>
+        <div class="stations-row">${cards}</div>
+        
+        <div class="esconder-no-celular" style="display: flex; align-items: center; justify-content: space-between; margin-top: 220px; padding: 30px clamp(16px, 4vw, 40px); background: linear-gradient(to top, rgba(18,25,35,0.9) 0%, transparent 100%); border-top: 1px solid rgba(41,51,63,0.2); border-radius: var(--radius); gap: 40px;">
+          
+          <div style="display: flex; flex-direction: column; gap: 8px; text-align: left;">
+            <h4 style="font-family: var(--font-display); color: var(--amber-bright); text-transform: uppercase; font-size: 26px; margin: 0; letter-spacing: 0.04em;">ACOMPANHE NO SEU CELULAR</h4>
+            <p style="color: var(--muted); font-size: 16px; margin: 0; font-weight: 500; line-height: 1.4;">Escaneie o QR Code ao lado para conferir os <strong style="color: var(--white);">Grupos</strong>, <strong style="color: var(--white);">Classificação</strong><br>e o <strong style="color: var(--white);">Horário dos próximos jogos</strong> em tempo real!</p>
+          </div>
 
+          <div style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0;">
+            <img src="assets/qrcode.png" alt="Acesse o site" style="width: 240px; height: 240px; border: 6px solid var(--white); border-radius: 12px; filter: drop-shadow(0 0 25px rgba(255,176,32,0.25));" />
+          </div>
+
+        </div>
+
+        <div class="esconder-na-tv">
+          <div style="height: 1px; background: var(--line); margin: 40px 0 20px 0; opacity: 0.5;"></div>
+          <div style="display: flex; justify-content: center; padding: 0 10px; margin-bottom: 30px;">
+            ${renderStoreAdsCard()}
+          </div>
+        </div>
+      </div>
+    `;
+  }
 /* ---------- Grupos ---------- */
 function renderGroupsTab(){
   if(!pubState.settings || !pubState.settings.groups_drawn){
@@ -182,3 +205,35 @@ function tickClock(){
   loadAll();
   subscribeRealtime(handleRealtimeChange);
 })();
+
+
+// Função para renderizar o Card de Propaganda da Loja com as tuas condições
+function renderStoreAdsCard() {
+  return `
+    <div class="live-station card-propaganda" style="border: 1px dashed var(--amber); background: linear-gradient(135deg, var(--panel) 60%, rgba(255,176,32,0.05) 100%); padding: 16px; border-radius: var(--radius); display: flex; flex-direction: column;">
+      <div class="live-station__head" style="border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-family: var(--font-display); color: var(--amber-bright); font-size: 18px; margin: 0; text-transform: uppercase;">NOSSOS PLANOS</h3>
+        <span class="live-station__badge" style="background: var(--amber); color: var(--void); font-weight: bold; padding: 2px 6px; border-radius: 4px; font-size: 11px;">PROMO HANGAR</span>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
+        <div style="padding-left: 8px; border-left: 2px solid var(--muted-2);">
+          <strong style="color: var(--white); font-weight: 600;">Estação Avulsa:</strong>
+          <div style="color: var(--muted); margin-top: 2px;">Jogue em qualquer estação de R$ 25 a R$ 40 a hora.</div>
+        </div>
+
+        <div style="padding-left: 8px; border-left: 2px solid var(--teal);">
+          <strong style="color: var(--teal); font-weight: 600;">Cartão da Loja (R$ 9,90/h):</strong>
+          <div style="color: var(--muted); margin-top: 2px;">Adquira o cartão por R$ 99,90 (inclui 10 créditos de 1h). <span style="font-size: 10px; color: var(--amber-dim);">*Consulte condições</span></div>
+        </div>
+
+        <div style="padding-left: 8px; border-left: 2px solid var(--amber); background: rgba(255,176,32,0.03); padding: 6px 8px; border-radius: var(--radius);">
+          <strong style="color: var(--amber-bright); text-transform: uppercase; letter-spacing: 0.05em;">🔥 NOVIDADE: HANGAR PASS</strong>
+          <div style="color: var(--white); margin-top: 2px; font-weight: 600; font-size: 15px;">R$ 119,90 / mês</div>
+          <div style="color: var(--muted); font-size: 12px; margin-top: 2px;">15 horas mensais para usar em qualquer PC, PS5 ou Simulador (VR não incluso).</div>
+          <div style="font-size: 10px; color: var(--muted-2); margin-top: 4px;">Fidelidade mínima de 3 meses (2 meses restantes no boleto).</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
