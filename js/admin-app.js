@@ -318,7 +318,6 @@ function renderMatchRowAdmin(m){
 
 /* ================= MATA-MATA ================= */
 function renderAdmBracket(){
-  function renderAdmBracket(){
   if(!admState.settings?.knockout_generated){
     // ALTERAÇÃO AQUI: Forçamos a variável a ser sempre true
     const koReady = true; 
