@@ -57,7 +57,8 @@ async function addPlayer(supabase, name){
   name = (name||'').trim();
   if(!name) return {ok:false, msg:'Nome não pode ser vazio.'};
   const { data: existing } = await supabase.from('players').select('id').eq('is_active', true);
-  if(existing && existing.length >= 32) return {ok:false, msg:'Limite de 32 jogadores atingido.'};
+  // Altere para ficar assim:
+  if(existing && existing.length >= 24) return {ok:false, msg:'Limite de 24 jogadores atingido.'};
   const { error } = await supabase.from('players').insert({ name, is_active:true });
   if(error) return {ok:false, msg:error.message};
   return {ok:true};
@@ -209,7 +210,7 @@ function computeStandingsFor(groupLetter, players, matches){
 function allGroupsComplete(matches){
   return GROUP_LETTERS.every(letter=>{
     const gm = matches.filter(m=>m.group_letter===letter);
-    return gm.length===4 && gm.every(m=>m.status==='done');
+    return gm.length===3 && gm.every(m=>m.status==='done');
   });
 }
 

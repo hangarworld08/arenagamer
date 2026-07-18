@@ -287,8 +287,10 @@ function renderAdmGroups(){
     const matches = admState.groupMatches.filter(m=>m.group_letter===letter).sort((a,b)=>(a.order_index??0)-(b.order_index??0));
     const complete = groupComplete(letter, admState.groupMatches);
     const rows = standings.map((t,i)=>`<tr class="${i<2?'qualified':''}"><td class="name-cell">${i<2?'<span class="qual-dot"></span>':''}${esc(admName(t.id))}</td><td>${t.played}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td><td>${t.gd>0?'+':''}${t.gd}</td><td>${t.pts}</td></tr>`).join('');
+    
+    // Mudamos o '/4' para '/3' na linha abaixo para mostrar o progresso real do grupo
     return `<div class="group-card">
-      <div class="group-card__head"><h3>Grupo ${letter}</h3><span class="group-card__badge">${complete?'✓':matches.filter(m=>m.status==='done').length+'/4'}</span></div>
+      <div class="group-card__head"><h3>Grupo ${letter}</h3><span class="group-card__badge">${complete?'✓':matches.filter(m=>m.status==='done').length+'/3'}</span></div>
       <table class="standings"><thead><tr><th>Jogador</th><th>J</th><th>V</th><th>E</th><th>D</th><th>SG</th><th>PTS</th></tr></thead><tbody>${rows}</tbody></table>
       <div class="group-card__matches">${matches.map(renderMatchRowAdmin).join('')}</div>
     </div>`;
