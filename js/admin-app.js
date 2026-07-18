@@ -318,8 +318,11 @@ function renderMatchRowAdmin(m){
 
 /* ================= MATA-MATA ================= */
 function renderAdmBracket(){
+  function renderAdmBracket(){
   if(!admState.settings?.knockout_generated){
-    const koReady = allGroupsComplete(admState.groupMatches);
+    // ALTERAÇÃO AQUI: Forçamos a variável a ser sempre true
+    const koReady = true; 
+    
     return `<div class="adm-section-head"><h2>Mata-mata</h2></div><div class="empty-state"><h3>${koReady ? 'Pronto para gerar a chave' : 'Conclua a fase de grupos primeiro'}</h3>
       ${koReady ? `<div style="margin-top:14px;"><button class="btn btn--primary" data-adm-action="generateBracket">Gerar chave do mata-mata</button></div>` : ''}</div>`;
   }
